@@ -1,0 +1,2 @@
+# osgi-playground
+OSGi Playground
