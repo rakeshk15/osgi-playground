@@ -20,13 +20,8 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>com.adeptj</groupId>
-        <artifactId>adeptj-modules-parent</artifactId>
-        <version>2</version>
-        <relativePath/>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.adeptj</groupId>
     <artifactId>osgi-playground</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
@@ -35,6 +30,26 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <solr.version>9.2.1</solr.version>
+        <commons-lang.version>3.13.0</commons-lang.version>
+        <slf4j.version>2.0.7</slf4j.version>
+        <junit-jupiter.version>5.10.0</junit-jupiter.version>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <!-- OSGi Dependencies Start -->
+        <osgi.framework.version>1.10.0</osgi.framework.version>
+        <osgi.service.component.annotations.version>1.5.1</osgi.service.component.annotations.version>
+        <osgi.service.metatype.annotations.version>1.4.1</osgi.service.metatype.annotations.version>
+        <osgi.annotation.versioning.version>1.1.2</osgi.annotation.versioning.version>
+        <osgi.annotation.bundle.version>2.0.0</osgi.annotation.bundle.version>
+        <osgi.service.component.version>1.5.1</osgi.service.component.version>
+        <osgi.service.cm.version>1.6.1</osgi.service.cm.version>
+        <osgi.service.http.whiteboard.version>1.1.1</osgi.service.http.whiteboard.version>
+        <osgi.service.servlet.version>2.0.0</osgi.service.servlet.version>
+        <osgi.service.event.version>1.4.1</osgi.service.event.version>
+        <osgi.util.tracker.version>1.5.4</osgi.util.tracker.version>
+        <osgi.service.metatype.version>1.4.1</osgi.service.metatype.version>
+        <!-- OSGi Dependencies End -->
     </properties>
 
     <!-- Project Information -->
@@ -97,15 +112,15 @@
         <plugins>
 
             <plugin>
-                <groupId>biz.aQute.bnd</groupId>
-                <artifactId>bnd-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>bnd-process</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
             </plugin>
 
         </plugins>
@@ -114,20 +129,120 @@
 
     <dependencies>
 
+        <!-- OSGi Dependencies Start -->
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.framework</artifactId>
+            <version>${osgi.framework.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.service.component.annotations</artifactId>
-            <version>1.4.0</version> <!-- AEM has SCR component package v1.4.0 -->
+            <version>${osgi.service.component.annotations.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.service.metatype.annotations</artifactId>
+            <version>${osgi.service.metatype.annotations.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation.versioning</artifactId>
+            <version>${osgi.annotation.versioning.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation.bundle</artifactId>
+            <version>${osgi.annotation.bundle.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component</artifactId>
+            <version>${osgi.service.component.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.cm</artifactId>
+            <version>${osgi.service.cm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.http.whiteboard</artifactId>
+            <version>${osgi.service.http.whiteboard.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.servlet</artifactId>
+            <version>${osgi.service.servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.event</artifactId>
+            <version>${osgi.service.event.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.util.tracker</artifactId>
+            <version>${osgi.util.tracker.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.metatype</artifactId>
+            <version>${osgi.service.metatype.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- OSGi Dependencies End -->
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
