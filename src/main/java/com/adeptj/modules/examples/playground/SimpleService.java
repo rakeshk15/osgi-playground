@@ -1,5 +1,6 @@
 package com.adeptj.modules.examples.playground;
 
-public interface MyService {
+public interface SimpleService {
+
     void hello();
 }
